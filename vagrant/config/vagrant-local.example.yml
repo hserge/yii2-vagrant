@@ -1,0 +1,31 @@
+# Your personal GitHub token
+github_token: <your-github-token-here>
+# Read more: https://github.com/blog/1509-personal-api-tokens
+# You can generate it here: https://github.com/settings/tokens
+
+# Guest OS timezone
+timezone: America/Los_Angeles
+
+# Are we need check box updates for every 'vagrant up'?
+box_check_update: false
+
+# Domain name (will be used as virtual machine name also)
+domain: myproject.local
+
+# Virtual machine IP
+ip: 192.168.83.135
+
+# Virtual machine CPU cores number
+cpus: 2
+
+# Virtual machine RAM
+memory: 1536
+
+# Database name
+db_name: myproject
+
+# PostgreSQL version
+db_version: 10
+
+# PHP version
+php_version: "7.2"
