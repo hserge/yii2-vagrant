@@ -28,7 +28,7 @@ echo "Done!"
 info "Install basic app"
 cd /app
 composer create-project --prefer-dist --stability=stable yiisoft/yii2-app-basic basic
-rm -rf basic/Vagrantfile basic/vagrant README.md
+rm -rf basic/Vagrantfile basic/vagrant README.md .git
 shopt -s dotglob
 mv basic/* ./
 rmdir basic
