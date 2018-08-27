@@ -1,6 +1,9 @@
 # yii2-vagrant
 This is a dev environment based on: Vagrant, php7.2, nginx, PostgreSQL10, yii2-base-app.
 
+This is based on yii2-basic-app vagrant configuration with some changes. The most notable is using PostgreSQL as a 
+database server.
+
 Installation
 --------------
 
@@ -16,7 +19,7 @@ to do any other change in provision scripts. They will use configuration paramet
 You can change php version in configuration. It should work correctly for 7.x version.
 
 #### PostgreSQL
-You can change php version in configuration. It should work correctly for 9.x and 10.x version.
+You can change PostgreSQL version in configuration. It should work correctly for 9.x and 10.x version.
 Database name is configurable, but username and password is hard coded, which are:
 ```
 username: localuser
