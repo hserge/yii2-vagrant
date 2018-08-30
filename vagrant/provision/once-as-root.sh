@@ -72,11 +72,12 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 
 info "Install PostgreSQL"
 # Edit the following to change the name of the database user that will be created:
-APP_DB_USER=localuser
+APP_DB_GROUP=${schema_name}group
+APP_DB_USER=${schema_name}user
 APP_DB_PASS=password
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
-APP_DB_NAME=$db_name
+APP_DB_NAME=db
 
 # Edit the following to change the version of PostgreSQL that is installed
 PG_VERSION=$db_version
@@ -90,6 +91,7 @@ print_db_usage () {
   echo "  Port: 5432"
   echo "  Version: $PG_VERSION"
   echo "  Database: $APP_DB_NAME"
+  echo "  Usergroup: $APP_DB_GROUP"
   echo "  Username: $APP_DB_USER"
   echo "  Password: $APP_DB_PASS"
   echo ""
@@ -155,11 +157,31 @@ cat << EOF | su - postgres -c psql
 -- Create the database user:
 CREATE USER $APP_DB_USER WITH PASSWORD '$APP_DB_PASS';
 -- Create the database:
-CREATE DATABASE $APP_DB_NAME WITH OWNER=$APP_DB_USER
-                                  LC_COLLATE='en_US.utf8'
-                                  LC_CTYPE='en_US.utf8'
-                                  ENCODING='UTF8'
-                                  TEMPLATE=template0;
+-- CREATE DATABASE $APP_DB_NAME WITH OWNER=$APP_DB_USER LC_COLLATE='en_US.utf8' LC_CTYPE='en_US.utf8' ENCODING='UTF8' TEMPLATE=template0;
+
+-- create database (execute separately first and select it or schema will be created in active db)
+CREATE DATABASE $APP_DB_USER WITH OWNER=$APP_DB_USER LC_COLLATE='en_US.utf8' LC_CTYPE='en_US.utf8' ENCODING='UTF8';
+
+-- create role
+CREATE ROLE $APP_DB_GROUP NOLOGIN;
+ALTER ROLE $APP_DB_GROUP IN DATABASE $APP_DB_NAME SET client_encoding TO 'utf8';
+ALTER ROLE $APP_DB_GROUP IN DATABASE $APP_DB_NAME SET default_transaction_isolation TO 'read committed';
+ALTER ROLE $APP_DB_GROUP IN DATABASE $APP_DB_NAME SET timezone TO 'UTC';
+
+-- create user
+CREATE USER $APP_DB_USER WITH LOGIN INHERIT IN ROLE $APP_DB_GROUP PASSWORD '$APP_DB_PASS';
+ALTER USER $APP_DB_USER IN DATABASE $APP_DB_NAME SET search_path TO $schema_name, public;
+
+-- create schema
+CREATE SCHEMA IF NOT EXISTS $schema_name AUTHORIZATION $APP_DB_GROUP;
+
+GRANT ALL PRIVILEGES ON SCHEMA public TO $APP_DB_GROUP;
+GRANT ALL PRIVILEGES ON SCHEMA $schema_name TO $APP_DB_GROUP;
+
+-- To set default privileges for future objects, run for every role that creates objects in this schema:
+ALTER DEFAULT PRIVILEGES FOR ROLE $APP_DB_USER IN SCHEMA public GRANT ALL ON TABLES TO $APP_DB_GROUP;
+ALTER DEFAULT PRIVILEGES FOR ROLE $APP_DB_USER IN SCHEMA public GRANT ALL ON SEQUENCES TO $APP_DB_GROUP;
+
 EOF
 
 # Tag the provision time:

@@ -4,11 +4,14 @@ require 'fileutils'
 # run plugin install manually
 # vagrant plugin install vagrant-vbguest
 # vagrant plugin install vagrant-hostmanager
+#exec "vagrant plugin install vagrant-hostmanager"
+#exec "vagrant plugin install vagrant-vbguest"
 
-required_plugins = %w( vagrant-hostmanager vagrant-vbguest )
-required_plugins.each do |plugin|
-    exec "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
-end
+
+#required_plugins = %w( vagrant-hostmanager vagrant-vbguest )
+#required_plugins.each do |plugin|
+#    exec "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+#end
 
 config = {
   local: './vagrant/config/vagrant-local.yml',

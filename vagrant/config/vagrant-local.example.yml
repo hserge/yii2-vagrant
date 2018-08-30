@@ -22,7 +22,7 @@ cpus: 2
 memory: 1536
 
 # Database name
-db_name: myproject
+schema_name: myproject
 
 # PostgreSQL version
 db_version: 10
