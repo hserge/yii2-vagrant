@@ -70,7 +70,7 @@ Vagrant.configure(2) do |config|
   config.hostmanager.include_offline    = true
 
   # provisioners
-  config.vm.provision 'shell', path: './vagrant/provision/once-as-root.sh', args: [options['timezone'], options['db_name'], options['db_version'], options['php_version']]
+  config.vm.provision 'shell', path: './vagrant/provision/once-as-root.sh', args: [options['timezone'], options['schema_name'], options['db_version'], options['php_version']]
   config.vm.provision 'shell', path: './vagrant/provision/once-as-vagrant.sh', args: [options['github_token'], options['domain']], privileged: false
   config.vm.provision 'shell', path: './vagrant/provision/always-as-root.sh', args: [options['php_version']], run: 'always'
 
