@@ -75,7 +75,6 @@ info "Install PostgreSQL"
 APP_DB_GROUP=${schema_name}group
 APP_DB_USER=${schema_name}user
 APP_DB_ADMIN=${schema_name}admin
-APP_DB_ADMIN_PASS=admin
 APP_DB_PASS=password
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
@@ -165,7 +164,7 @@ ALTER ROLE $APP_DB_GROUP SET client_encoding TO 'utf8';
 ALTER ROLE $APP_DB_GROUP SET timezone TO 'UTC';
 
 -- create user
-CREATE USER $APP_DB_ADMIN WITH LOGIN PASSWORD '$APP_DB_ADMIN_PASS' SUPERUSER;
+CREATE USER $APP_DB_ADMIN WITH LOGIN PASSWORD '$APP_DB_PASS' SUPERUSER;
 CREATE USER $APP_DB_USER WITH LOGIN INHERIT IN ROLE $APP_DB_GROUP PASSWORD '$APP_DB_PASS';
 ALTER USER $APP_DB_USER SET search_path TO $schema_name, public;
 
